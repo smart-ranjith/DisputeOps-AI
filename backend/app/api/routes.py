@@ -28,6 +28,14 @@ class SimulateDisputeRequest(BaseModel):
     has_pod: bool = True
     auto_investigate: bool = True
 
+class AddEvidenceRequest(BaseModel):
+    category: str  # "PROOF_OF_DELIVERY", "CUSTOMER_COMMUNICATION", "POLICE_REPORT", "QUALITY_INSPECTION", "INVOICE"
+    title: str
+    description: str
+    document_url: str | None = None
+    verified: bool = True
+    re_audit: bool = True
+
 class HumanApprovalRequest(BaseModel):
     reviewer_name: str
     decision: str  # "APPROVE_AND_SUBMIT" or "REJECT_AND_REFUND"
@@ -120,6 +128,37 @@ def run_investigation(dispute_id: str):
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Investigation failed: {str(e)}")
+
+@router.post("/disputes/{dispute_id}/evidence")
+def attach_evidence(dispute_id: str, payload: AddEvidenceRequest):
+    """
+    Operator Tool: Attach supplementary evidence to a dispute case,
+    and automatically trigger an Evidence Auditor re-check.
+    """
+    record = {
+        "dispute_id": dispute_id,
+        "category": payload.category,
+        "title": payload.title,
+        "description": payload.description,
+        "document_url": payload.document_url or f"/documents/{dispute_id}/{payload.category.lower()}.pdf",
+        "verified": payload.verified,
+        "source_system": "Operator Upload"
+    }
+    ev_id = merchant_data_service.add_evidence_record(record)
+    log_audit(dispute_id, "EVIDENCE_MANUALLY_ATTACHED", "Operations Specialist", {"category": payload.category, "title": payload.title})
+
+    re_audit_result = None
+    if payload.re_audit:
+        try:
+            re_audit_result = orchestrator.run_investigation(dispute_id)
+        except Exception as e:
+            pass
+
+    return {
+        "status": "SUCCESS",
+        "evidence_id": ev_id,
+        "re_audit": re_audit_result
+    }
 
 @router.put("/disputes/{dispute_id}/draft")
 def update_draft(dispute_id: str, payload: UpdateDraftRequest):
