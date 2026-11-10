@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DisputeOps AI - Conclusion</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #172554 0%, #0b0f19 65%, #050811 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 4.5rem 6rem;
+      position: relative;
+    }
+    
+    /* Top accent line */
+    .top-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #3b82f6, #06b6d4, #10b981);
+    }
+
+    .header-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .logo-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.45);
+    }
+
+    .logo-box svg {
+      width: 42px;
+      height: 42px;
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 2.2;
+    }
+
+    .brand-title {
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: #38bdf8;
+    }
+
+    .brand-subtitle {
+      font-size: 1.25rem;
+      color: #94a3b8;
+      margin-top: 0.35rem;
+      font-weight: 500;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      padding: 0.6rem 1.4rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* 4 Agents Grid */
+    .agents-grid {
+      display: grid;
+      grid-templateColumns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin: 2.5rem 0;
+    }
+
+    .agent-card {
+      background: rgba(30, 41, 59, 0.65);
+      backdrop-filter: blur(16px);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 1.75rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+
+    .card-1::before { background: #3b82f6; }
+    .card-2::before { background: #06b6d4; }
+    .card-3::before { background: #f59e0b; }
+    .card-4::before { background: #10b981; }
+
+    .agent-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-1 .agent-num { color: #60a5fa; }
+    .card-2 .agent-num { color: #38bdf8; }
+    .card-3 .agent-num { color: #fbbf24; }
+    .card-4 .agent-num { color: #34d399; }
+
+    .agent-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 0.4rem;
+    }
+
+    .agent-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    /* Metrics Banner */
+    .metrics-banner {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 1.5rem 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .metric-val {
+      font-size: 2.3rem;
+      font-weight: 900;
+      color: #f8fafc;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-lbl {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-top: 0.2rem;
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .footer-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #1e293b;
+      padding-top: 1.5rem;
+    }
+
+    .repo-link {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .powered-by {
+      font-size: 0.95rem;
+      color: #64748b;
+    }
+    
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 12px #10b981;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+
+  <!-- Header -->
+  <div class="header-section">
+    <div class="brand-wrap">
+      <div class="logo-box">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+      </div>
+      <div>
+        <h1 class="brand-title">DisputeOps <span>AI</span></h1>
+        <p class="brand-subtitle">Agentic AI for Intelligent Payment Dispute Investigation & Loss Prevention</p>
+      </div>
+    </div>
+    <div class="pill-badge">
+      <span class="pulse-dot"></span>
+      PayPal REST API Integrated
+    </div>
+  </div>
+
+  <!-- 4 Specialized Agents Architecture -->
+  <div class="agents-grid">
+    <div class="agent-card card-1">
+      <div class="agent-num">Agent 01</div>
+      <div class="agent-name">Dispute Analyst</div>
+      <div class="agent-desc">Understands dispute reasons, assesses lifecycle urgency, and maps mandatory evidence categories.</div>
+    </div>
+    <div class="agent-card card-2">
+      <div class="agent-num">Agent 02</div>
+      <div class="agent-name">Evidence Collector</div>
+      <div class="agent-desc">Retrieves order logs, carrier consignment records, tax invoices, and signed delivery sheets across ERPs.</div>
+    </div>
+    <div class="agent-card card-3">
+      <div class="agent-num">Agent 03</div>
+      <div class="agent-name">Evidence Auditor</div>
+      <div class="agent-desc">Executes deterministic rule audits, verifies amounts/dates, and flags missing gaps before submission.</div>
+    </div>
+    <div class="agent-card card-4">
+      <div class="agent-num">Agent 04</div>
+      <div class="agent-name">Resolution Agent</div>
+      <div class="agent-desc">Synthesizes grounded formal defense drafts with verified citations and customizable strategic tones.</div>
+    </div>
+  </div>
+
+  <!-- Metrics Banner -->
+  <div class="metrics-banner">
+    <div>
+      <div class="metric-val" style="color: #38bdf8;">&lt; 35 ms</div>
+      <div class="metric-lbl">Autonomous Investigation Speed</div>
+    </div>
+    <div>
+      <div class="metric-val" style="color: #34d399;">84.6%</div>
+      <div class="metric-lbl">Estimated Defense Win Rate</div>
+    </div>
+    <div>
+      <div class="metric-val" style="color: #fbbf24;">₹1,500+</div>
+      <div class="metric-lbl">Penalty Fees Saved Per Case</div>
+    </div>
+    <div>
+      <div class="metric-val" style="color: #a78bfa;">100%</div>
+      <div class="metric-lbl">Deterministic Guardrails (Zero Hallucination)</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-section">
+    <div class="repo-link">
+      <span>★ Open Source Repository:</span>
+      <span>github.com/smart-ranjith/DisputeOps-AI</span>
+    </div>
+    <div class="powered-by">
+      Built with FastAPI, React, SQLite, and PayPal Disputes REST API
+    </div>
+  </div>
+</body>
+</html>

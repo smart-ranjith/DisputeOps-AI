@@ -160,10 +160,18 @@ def capture_screenshots():
         driver.save_screenshot(os.path.join(OUTPUT_DIR, "scene_6_response_editor.png"))
         
         # 7. Approval Modal
+        # Ensure dispute 839210 is selected
+        for r in driver.find_elements(By.TAG_NAME, "tr"):
+            if "839210" in r.text:
+                driver.execute_script("arguments[0].click();", r)
+                time.sleep(1.5)
+                break
+                
         approve_btns = driver.find_elements(By.XPATH, "//button[contains(., 'Review & Approve')]")
         if approve_btns:
             driver.execute_script("arguments[0].click();", approve_btns[0])
-            time.sleep(1.5)
+            driver.execute_script("window.scrollTo(0, 0);")
+            time.sleep(2)
             driver.save_screenshot(os.path.join(OUTPUT_DIR, "scene_7_approval.png"))
             # Reload page to cleanly close modal
             driver.get("http://127.0.0.1:5173")
@@ -177,8 +185,11 @@ def capture_screenshots():
             driver.execute_script("window.scrollTo(0, 0);")
             driver.save_screenshot(os.path.join(OUTPUT_DIR, "scene_8_analytics.png"))
             
-        # 9. Conclusion
-        create_conclusion_slide(os.path.join(OUTPUT_DIR, "scene_9_conclusion.png"))
+        # 9. Conclusion Slide (Rendered via HTML in full 1080p)
+        conclusion_url = "file:///" + os.path.join(OUTPUT_DIR, "conclusion_slide.html").replace("\\", "/")
+        driver.get(conclusion_url)
+        time.sleep(1.5)
+        driver.save_screenshot(os.path.join(OUTPUT_DIR, "scene_9_conclusion.png"))
         
     finally:
         driver.quit()
